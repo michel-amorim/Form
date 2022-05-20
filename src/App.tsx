@@ -4,11 +4,25 @@ import "./App.css";
 
 const App: React.FC = () => {
   const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState(0);
 
   const handleSubmit = useCallback(
     (event: any) => {
-      console.log(event);
+      event.preventDefault();
+
+      if (!name.trim()) {
+        console.log("Informe o nome");
+        return;
+      }
+      if (age <= 0) {
+        console.log("Informe a idade");
+        return;
+      }
+
+      console.log("Name: ", +name, "- Age: ", +age);
+
+      event.target.reset();
+      setName("");
     },
     [name, age]
   );
@@ -29,7 +43,7 @@ const App: React.FC = () => {
           type="number"
           placeholder="Age..."
           className="form-control mb2"
-          onChange={(e) => setAge(e.target.value)}
+          onChange={(e) => setAge(Number(e.target.value))}
         />
 
         <button className="btn btn-primary btn-block" type="submit">
