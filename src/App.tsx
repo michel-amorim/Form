@@ -1,50 +1,54 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
 
 import "./App.css";
 
-const App: React.FC = () => {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState(0);
+type Inputs = {
+  name: string;
+  age: number;
+};
 
-  const handleSubmit = useCallback(
-    (event: any) => {
-      event.preventDefault();
+const App: React.FC<Inputs> = () => {
+  const {
+    register,
+    handleSubmit,
 
-      if (!name.trim()) {
-        console.log("Informe o nome");
-        return;
-      }
-      if (age <= 0) {
-        console.log("Informe a idade");
-        return;
-      }
+    formState: { errors },
+  } = useForm<Inputs>();
 
-      console.log("Name: ", +name, "- Age: ", +age);
-
-      event.target.reset();
-      setName("");
-    },
-    [name, age]
-  );
+  const onSubmit = useCallback((data: any) => {
+    console.log(data);
+  }, []);
 
   return (
     <div className="container">
       <h2>Formulario</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
-          name="name"
           type="text"
           placeholder="Name..."
           className="form-control mb2"
-          onChange={(e) => setName(e.target.value)}
+          {...register("name", {
+            required: {
+              value: true,
+              message: "This field is required",
+            },
+            minLength: {
+              value: 5,
+              message: "Min length is 5",
+            },
+          })}
         />
+        {errors.name && <span>{errors.name.message}</span>}
         <input
-          name="age"
           type="number"
           placeholder="Age..."
           className="form-control mb2"
-          onChange={(e) => setAge(Number(e.target.value))}
+          {...register("age", {
+            required: true,
+          })}
         />
+        {errors.age && <span>This field is required</span>}
 
         <button className="btn btn-primary btn-block" type="submit">
           Submit
