@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 
-import "./App.css";
+import "./style.css";
 
 type Inputs = {
-  name: string;
-  age: number;
+  name?: string;
+  age?: number;
 };
 
 const App: React.FC<Inputs> = () => {
@@ -21,17 +21,17 @@ const App: React.FC<Inputs> = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h2>Formulario</h2>
+    <div className="min-hei container d-flex flex-column justify-content-center">
+      <h2 className="text-white">Formulário</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"
           placeholder="Name..."
-          className="form-control mb2"
+          className="form-control mb-3"
           {...register("name", {
             required: {
               value: true,
-              message: "This field is required",
+              message: "Nome é obrigatório",
             },
             minLength: {
               value: 5,
@@ -39,16 +39,18 @@ const App: React.FC<Inputs> = () => {
             },
           })}
         />
-        {errors.name && <span>{errors.name.message}</span>}
+        {errors.name && (
+          <span className="d-block p-1">{errors.name.message}</span>
+        )}
         <input
           type="number"
           placeholder="Age..."
-          className="form-control mb2"
+          className="form-control mb-2"
           {...register("age", {
             required: true,
           })}
         />
-        {errors.age && <span>This field is required</span>}
+        {errors.age && <span className="d-block p-1 ">Idade obrigatório</span>}
 
         <button className="btn btn-primary btn-block" type="submit">
           Submit
